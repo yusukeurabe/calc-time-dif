@@ -39,7 +39,8 @@ export function offsetMinutes(utcMs, timeZone) {
 }
 
 // Convert a wall-clock time in a zone to a UTC instant.
-// Ambiguous times (DST fall-back) resolve to the earlier occurrence.
+// Ambiguous times (DST fall-back) resolve deterministically to one
+// occurrence (which one depends on the zone's offset sign).
 // Nonexistent times (spring-forward gap) resolve to a nearby instant.
 export function zonedTimeToUtc(wall, timeZone) {
   const { year, month, day, hour = 0, minute = 0, second = 0 } = wall;
