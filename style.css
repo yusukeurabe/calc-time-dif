@@ -41,12 +41,18 @@ body {
   font-size: 13px; padding: 4px 12px; border-radius: 8px;
 }
 
-.lang-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.lang-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; }
 .lang-toggle button {
   border: none; background: var(--surface); color: var(--muted);
   font-size: 12px; padding: 5px 10px; cursor: pointer;
 }
+.lang-toggle button:first-child { border-radius: 7px 0 0 7px; }
+.lang-toggle button:last-child { border-radius: 0 7px 7px 0; }
 .lang-toggle button.active { background: var(--accent-bg); color: var(--accent); font-weight: 600; }
+
+button:focus-visible, select:focus-visible, input:focus-visible, .tl-cursor:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
 
 .unsupported { background: var(--warn-bg); color: var(--warn-text); padding: 12px; border-radius: 8px; }
 
@@ -69,8 +75,8 @@ body {
 .tl-strips { position: absolute; inset: 0; }
 
 .tl-strip { position: absolute; left: 0; right: 0; height: 54px; }
-.tl-strip:first-child { top: 22px; }
-.tl-strip:last-child { top: 104px; }
+.tl-strip-a { top: 22px; }
+.tl-strip-b { top: 104px; }
 
 .tl-cell {
   position: absolute; top: 0; height: 32px;

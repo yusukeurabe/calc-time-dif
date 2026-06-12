@@ -36,7 +36,7 @@
       <div class="tl-track">
         <div class="tl-strips"></div>
         <div class="tl-now" aria-hidden="true"><span class="tl-now-label" id="now-marker-label">Now</span></div>
-        <div class="tl-cursor" id="tl-cursor"><span class="tl-cursor-handle"></span></div>
+        <div class="tl-cursor" id="tl-cursor" tabindex="0" role="slider" aria-label="Timeline cursor"><span class="tl-cursor-handle"></span></div>
       </div>
     </div>
     <div class="tl-label" id="label-a"></div>
@@ -64,7 +64,7 @@
   </section>
 
   <section class="direct-input">
-    <label id="time-label" for="time-input"></label>
+    <label id="time-label" for="time-input">Time</label>
     <input id="time-input" type="time">
   </section>
 </main>
