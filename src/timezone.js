@@ -37,3 +37,15 @@ export function offsetMinutes(utcMs, timeZone) {
   const asUtc = Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute, p.second);
   return Math.round((asUtc - utcMs) / 60000);
 }
+
+// Convert a wall-clock time in a zone to a UTC instant.
+// Ambiguous times (DST fall-back) resolve to the earlier occurrence.
+// Nonexistent times (spring-forward gap) resolve to a nearby instant.
+export function zonedTimeToUtc(wall, timeZone) {
+  const { year, month, day, hour = 0, minute = 0, second = 0 } = wall;
+  const naive = Date.UTC(year, month - 1, day, hour, minute, second);
+  let utc = naive - offsetMinutes(naive, timeZone) * 60000;
+  // One correction pass handles instants near offset transitions.
+  utc = naive - offsetMinutes(utc, timeZone) * 60000;
+  return utc;
+}
