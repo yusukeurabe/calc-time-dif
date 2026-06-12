@@ -67,3 +67,41 @@ export function startOfZonedDay(utcMs, timeZone) {
 export function nextZonedMidnight(utcMs, timeZone) {
   return startOfZonedDay(startOfZonedDay(utcMs, timeZone) + 30 * HOUR, timeZone);
 }
+
+// Signed hour difference "zoneB minus zoneA" at an instant (can be fractional).
+export function offsetDiffHours(utcMs, zoneA, zoneB) {
+  return (offsetMinutes(utcMs, zoneB) - offsetMinutes(utcMs, zoneA)) / 60;
+}
+
+// -1 if zoneB's local date is the day before zoneA's, +1 the day after, 0 same.
+export function dayRelation(utcMs, zoneA, zoneB) {
+  const a = zonedParts(utcMs, zoneA);
+  const b = zonedParts(utcMs, zoneB);
+  const diff = Date.UTC(b.year, b.month - 1, b.day) - Date.UTC(a.year, a.month - 1, a.day);
+  return Math.round(diff / 86400000);
+}
+
+export function dateKeyOf(p) {
+  return `${p.year}-${String(p.month).padStart(2, '0')}-${String(p.day).padStart(2, '0')}`;
+}
+
+export function parseDateKey(key) {
+  const [year, month, day] = key.split('-').map(Number);
+  return { year, month, day };
+}
+
+// Hour cells covering [utcStartMs, utcEndMs) in zone. One cell per existing
+// local hour: {utc, hour, isDay, dateKey}. DST days yield 23/25 cells.
+export function hourCells(utcStartMs, utcEndMs, timeZone) {
+  const cells = [];
+  for (let t = floorToZonedHour(utcStartMs, timeZone); t < utcEndMs; t += HOUR) {
+    const p = zonedParts(t, timeZone);
+    cells.push({
+      utc: t,
+      hour: p.hour,
+      isDay: p.hour >= DAY_START_HOUR && p.hour < DAY_END_HOUR,
+      dateKey: dateKeyOf(p),
+    });
+  }
+  return cells;
+}
