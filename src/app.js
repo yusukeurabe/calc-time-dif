@@ -17,8 +17,11 @@ const state = {
   cityA: 'tokyo',
   cityB: 'vancouver',
   lang: 'en',
+  theme: 'dark',
   cursorUtc: roundToMinute(Date.now()),
 };
+
+const THEME_COLORS = { dark: '#131418', light: '#f6f5f1' }; // keep in sync with style.css --bg
 
 function loadSettings() {
   try {
@@ -28,13 +31,14 @@ function loadSettings() {
       state.cityB = raw.cityB;
     }
     if (raw && (raw.lang === 'en' || raw.lang === 'ja')) state.lang = raw.lang;
+    if (raw && (raw.theme === 'dark' || raw.theme === 'light')) state.theme = raw.theme;
   } catch { /* corrupt storage -> defaults */ }
 }
 
 function saveSettings() {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      cityA: state.cityA, cityB: state.cityB, lang: state.lang,
+      cityA: state.cityA, cityB: state.cityB, lang: state.lang, theme: state.theme,
     }));
   } catch { /* private mode etc. */ }
 }
@@ -96,6 +100,18 @@ function renderReadouts() {
   timeline.setCursor(state.cursorUtc);
 }
 
+function applyTheme() {
+  document.documentElement.dataset.theme = state.theme;
+  document.querySelector('meta[name="theme-color"]').setAttribute('content', THEME_COLORS[state.theme]);
+  const s = STRINGS[state.lang];
+  const label = state.theme === 'dark' ? s.themeToLight : s.themeToDark;
+  const btn = $('theme-toggle');
+  btn.setAttribute('aria-label', label);
+  btn.title = label;
+  btn.querySelector('.icon-sun').toggleAttribute('hidden', state.theme !== 'dark');
+  btn.querySelector('.icon-moon').toggleAttribute('hidden', state.theme === 'dark');
+}
+
 // Full re-render: strings, selects, timeline rebuild. Use on city/lang change.
 function renderAll() {
   const s = STRINGS[state.lang];
@@ -108,6 +124,7 @@ function renderAll() {
   $('lang-ja').classList.toggle('active', state.lang === 'ja');
   $('lang-en').setAttribute('aria-pressed', String(state.lang === 'en'));
   $('lang-ja').setAttribute('aria-pressed', String(state.lang === 'ja'));
+  applyTheme();
   $('swap').setAttribute('aria-label', s.swap);
   $('select-a').setAttribute('aria-label', s.cityA);
   $('select-b').setAttribute('aria-label', s.cityB);
@@ -184,6 +201,11 @@ function bindEvents() {
   });
   $('lang-en').addEventListener('click', () => setLang('en'));
   $('lang-ja').addEventListener('click', () => setLang('ja'));
+  $('theme-toggle').addEventListener('click', () => {
+    state.theme = state.theme === 'dark' ? 'light' : 'dark';
+    saveSettings();
+    applyTheme();
+  });
 }
 
 function setLang(lang) {

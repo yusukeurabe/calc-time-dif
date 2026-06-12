@@ -1,4 +1,29 @@
+/* Dark is the default theme; light is opted into via data-theme="light". */
 :root {
+  color-scheme: dark;
+  --bg: #131418;
+  --surface: #1d1f25;
+  --text: #e9e7e2;
+  --muted: #a09e98;
+  --border: #34363e;
+  --day: #d99e3a;
+  --day-text: #2b1a00;
+  --night: #4e4798;
+  --night-text: #e3e0ff;
+  --accent: #7db4e8;
+  --accent-bg: #1c2c3e;
+  --accent-border: #31506f;
+  --warn-bg: #3a2d12;
+  --warn-text: #e8b46a;
+  --now: #2fbf8f;
+  --label-bg: rgba(29, 31, 37, 0.88);
+  --sun-icon: #f0b14e;
+  --moon-icon: #a9a0f0;
+  --radius: 12px;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
   --bg: #f6f5f1;
   --surface: #ffffff;
   --text: #1f1e1c;
@@ -14,7 +39,9 @@
   --warn-bg: #faeeda;
   --warn-text: #854f0b;
   --now: #1d9e75;
-  --radius: 12px;
+  --label-bg: rgba(255, 255, 255, 0.88);
+  --sun-icon: #ba7517;
+  --moon-icon: #534ab7;
 }
 
 * { box-sizing: border-box; }
@@ -49,6 +76,13 @@ body {
 .lang-toggle button:first-child { border-radius: 7px 0 0 7px; }
 .lang-toggle button:last-child { border-radius: 0 7px 7px 0; }
 .lang-toggle button.active { background: var(--accent-bg); color: var(--accent); font-weight: 600; }
+
+.theme-toggle {
+  display: inline-flex; align-items: center;
+  border: 1px solid var(--border); border-radius: 8px; background: var(--surface);
+  color: var(--muted); padding: 6px 8px; cursor: pointer;
+}
+.theme-toggle:hover { color: var(--text); }
 
 button:focus-visible, select:focus-visible, input:focus-visible, .tl-cursor:focus-visible {
   outline: 2px solid var(--accent); outline-offset: 2px;
@@ -124,7 +158,7 @@ button:focus-visible, select:focus-visible, input:focus-visible, .tl-cursor:focu
 .tl-label {
   position: absolute; left: 12px; z-index: 5; pointer-events: none;
   font-size: 12px; font-weight: 600;
-  background: rgba(255, 255, 255, 0.88); padding: 1px 7px; border-radius: 6px;
+  background: var(--label-bg); padding: 1px 7px; border-radius: 6px;
 }
 #label-a { top: 14px; }
 #label-b { top: 96px; }
@@ -137,6 +171,9 @@ button:focus-visible, select:focus-visible, input:focus-visible, .tl-cursor:focu
 .day-badge { background: var(--warn-bg); color: var(--warn-text); font-size: 11px; padding: 2px 8px; border-radius: 8px; }
 .card-time-row { display: flex; align-items: center; gap: 8px; margin: 0; }
 .card-time { font-size: 30px; font-weight: 600; }
+/* Overrides the hardcoded stroke attributes so icons adapt to the theme. */
+.card .icon-sun { stroke: var(--sun-icon); }
+.card .icon-moon { stroke: var(--moon-icon); }
 
 .direct-input { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .direct-input label { font-size: 13px; color: var(--muted); }

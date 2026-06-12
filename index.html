@@ -4,6 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Time zone timeline</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#131418">
+<script>
+// Apply the saved theme before first paint to avoid a flash. Key matches src/app.js.
+try {
+  var saved = JSON.parse(localStorage.getItem('tz-timeline-settings'));
+  document.documentElement.dataset.theme = saved && saved.theme === 'light' ? 'light' : 'dark';
+} catch (e) { document.documentElement.dataset.theme = 'dark'; }
+</script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,6 +22,10 @@
     <h1 id="title-text">Time zone timeline</h1>
     <div class="top-right">
       <span id="badge" class="badge"></span>
+      <button id="theme-toggle" type="button" class="theme-toggle" aria-label="Switch to light mode">
+        <svg class="icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>
+      </button>
       <div class="lang-toggle" role="group" aria-label="Language">
         <button id="lang-en" type="button" class="active">EN</button>
         <button id="lang-ja" type="button">日本語</button>

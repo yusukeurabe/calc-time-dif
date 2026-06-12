@@ -21,6 +21,8 @@ export const STRINGS = {
     ahead: (b, n, a) => `${b} is ${n} ${n === '1' ? 'hour' : 'hours'} ahead of ${a}`,
     same: () => 'Both cities share the same time',
     unsupported: 'Sorry, your browser is not supported.',
+    themeToLight: 'Switch to light mode',
+    themeToDark: 'Switch to dark mode',
   },
   ja: {
     title: '時差タイムライン',
@@ -38,6 +40,8 @@ export const STRINGS = {
     ahead: (b, n, a) => `${b}は${a}より${n}時間進み`,
     same: () => '2都市は同じ時刻です',
     unsupported: 'お使いのブラウザは対応していません。',
+    themeToLight: 'ライトモードに切り替え',
+    themeToDark: 'ダークモードに切り替え',
   },
 };
 
