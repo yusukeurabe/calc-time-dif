@@ -19,7 +19,7 @@
 - アプリ名: Time zone timeline
 - 時差バッジ: 例 "Vancouver is 16 hours behind Japan"
   - 選択中のカーソル時刻時点での時差を表示（夏時間で16時間/17時間が切り替わる）
-  - 同時刻なら "Same time"、相手が進んでいる場合は "ahead"
+  - 同時刻なら "Both cities share the same time"（JA: 「2都市は同じ時刻です」）、相手が進んでいる場合は "ahead"
 - 言語切替: EN / 日本語 のトグル。**デフォルトは英語**。選択は localStorage に保存
 
 ### 2.2 コントロール行
