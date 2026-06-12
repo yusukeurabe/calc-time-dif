@@ -79,10 +79,11 @@ export class Timeline {
       if (last || cells[i + 1].dateKey !== c.dateKey) {
         const x0 = this.xForUtc(cells[segStart].utc);
         const x1 = last ? this.xForUtc(c.utc) + this.cellWidth : this.xForUtc(cells[i + 1].utc);
-        const seg = el(
-          `tl-seg${c.dateKey === todayKey ? ' today' : ''}`,
-          formatDateLabel(this.lang, parseDateKey(c.dateKey)),
-        );
+        const seg = el(`tl-seg${c.dateKey === todayKey ? ' today' : ''}`);
+        // Sticky inner label stays readable while a multi-day segment scrolls by.
+        const segLabel = document.createElement('span');
+        segLabel.textContent = formatDateLabel(this.lang, parseDateKey(c.dateKey));
+        seg.appendChild(segLabel);
         seg.style.left = `${x0}px`;
         seg.style.width = `${x1 - x0}px`;
         strip.appendChild(seg);

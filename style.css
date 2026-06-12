@@ -89,10 +89,11 @@ button:focus-visible, select:focus-visible, input:focus-visible, .tl-cursor:focu
 
 .tl-seg {
   position: absolute; top: 32px; height: 22px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden;
+  display: flex; align-items: center; justify-content: flex-start;
+  font-size: 12px; font-weight: 500; white-space: nowrap;
   background: var(--bg); color: var(--muted); border: 1px solid var(--border);
 }
+.tl-seg span { position: sticky; left: 8px; padding: 0 8px; }
 .tl-seg.today { background: var(--accent-bg); color: var(--accent); border-color: var(--accent-border); }
 
 .tl-midnight-line {

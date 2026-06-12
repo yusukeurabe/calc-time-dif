@@ -63,8 +63,9 @@ function renderCard(card, name, tz, rel) {
   badge.hidden = rel === 0;
   if (rel !== 0) badge.textContent = rel < 0 ? s.prevDay : s.nextDay;
   card.querySelector('.card-time').textContent = formatTime(p);
-  card.querySelector('.icon-sun').hidden = !isDay;
-  card.querySelector('.icon-moon').hidden = isDay;
+  // SVG elements have no `hidden` IDL property, so toggle the attribute.
+  card.querySelector('.icon-sun').toggleAttribute('hidden', !isDay);
+  card.querySelector('.icon-moon').toggleAttribute('hidden', isDay);
 }
 
 // Cheap updates that follow every cursor move (incl. continuous drags).
@@ -205,5 +206,6 @@ loadSettings();
 const timeline = new Timeline($('timeline'), { cellWidth: CELL_W, onPick });
 bindEvents();
 renderAll();
-timeline.scrollToTime(state.cursorUtc, false);
+// Center the cursor after layout settles; clientWidth can still be 0 here.
+requestAnimationFrame(() => timeline.scrollToTime(state.cursorUtc, false));
 setInterval(() => timeline.setNow(Date.now()), 60000);
