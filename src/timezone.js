@@ -49,3 +49,21 @@ export function zonedTimeToUtc(wall, timeZone) {
   utc = naive - offsetMinutes(utc, timeZone) * 60000;
   return utc;
 }
+
+// UTC instant of the most recent local hour boundary at or before utcMs.
+export function floorToZonedHour(utcMs, timeZone) {
+  const p = zonedParts(utcMs, timeZone);
+  return utcMs - p.minute * 60000 - p.second * 1000 - (utcMs % 1000);
+}
+
+// UTC instant of local midnight of the day containing utcMs.
+export function startOfZonedDay(utcMs, timeZone) {
+  const p = zonedParts(utcMs, timeZone);
+  return zonedTimeToUtc({ year: p.year, month: p.month, day: p.day }, timeZone);
+}
+
+// UTC instant of the next local midnight strictly after utcMs.
+// (start + 30h always lands inside the next local day, even on 23/25h days.)
+export function nextZonedMidnight(utcMs, timeZone) {
+  return startOfZonedDay(startOfZonedDay(utcMs, timeZone) + 30 * HOUR, timeZone);
+}

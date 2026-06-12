@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { zonedParts, offsetMinutes, zonedTimeToUtc } from '../src/timezone.js';
+import { zonedParts, offsetMinutes, zonedTimeToUtc, floorToZonedHour, startOfZonedDay, nextZonedMidnight } from '../src/timezone.js';
 
 const TOKYO = 'Asia/Tokyo';
 const VAN = 'America/Vancouver';
@@ -49,4 +49,28 @@ test('cross-zone: Japan Fri Jun 12 11:00 = Vancouver Thu Jun 11 19:00', () => {
     { y: v.year, m: v.month, d: v.day, h: v.hour },
     { y: 2026, m: 6, d: 11, h: 19 },
   );
+});
+
+test('floorToZonedHour: floors to the local hour boundary', () => {
+  const utc = Date.UTC(2026, 5, 12, 2, 45, 30); // Tokyo 11:45:30
+  assert.equal(floorToZonedHour(utc, TOKYO), Date.UTC(2026, 5, 12, 2));
+});
+
+test('floorToZonedHour: works in a half-hour zone (Delhi, UTC+5:30)', () => {
+  const utc = Date.UTC(2026, 5, 12, 10, 45); // Delhi 16:15
+  assert.equal(floorToZonedHour(utc, 'Asia/Kolkata'), Date.UTC(2026, 5, 12, 10, 30));
+});
+
+test('startOfZonedDay / nextZonedMidnight: normal 24h day', () => {
+  const noon = zonedTimeToUtc({ year: 2026, month: 6, day: 12, hour: 12 }, TOKYO);
+  const start = startOfZonedDay(noon, TOKYO);
+  assert.equal(start, Date.UTC(2026, 5, 11, 15)); // Tokyo Jun 12 00:00
+  assert.equal(nextZonedMidnight(noon, TOKYO) - start, 24 * 3600000);
+});
+
+test('nextZonedMidnight: spring-forward day is 23h, fall-back day is 25h', () => {
+  const mar8 = zonedTimeToUtc({ year: 2026, month: 3, day: 8 }, VAN);
+  assert.equal(nextZonedMidnight(mar8, VAN) - mar8, 23 * 3600000);
+  const nov1 = zonedTimeToUtc({ year: 2026, month: 11, day: 1 }, VAN);
+  assert.equal(nextZonedMidnight(nov1, VAN) - nov1, 25 * 3600000);
 });
