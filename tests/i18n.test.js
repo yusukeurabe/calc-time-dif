@@ -11,6 +11,8 @@ test('formatDateLabel: EN and JA', () => {
 test('formatTime: 24h, zero-padded minutes only', () => {
   assert.equal(formatTime({ hour: 9, minute: 5 }), '9:05');
   assert.equal(formatTime({ hour: 19, minute: 0 }), '19:00');
+  // Unpadded hour is intentional, matching the 0-23 labels on the timeline bars.
+  assert.equal(formatTime({ hour: 0, minute: 0 }), '0:00');
 });
 
 test('diffBadgeText: behind / ahead / same / fractional', () => {
@@ -23,6 +25,8 @@ test('diffBadgeText: behind / ahead / same / fractional', () => {
     'バンクーバーは日本（東京）より16時間遅れ',
   );
   assert.equal(diffBadgeText('en', 'A', 'B', 5.5), 'B is 5.5 hours ahead of A');
+  assert.equal(diffBadgeText('en', 'A', 'B', -5.5), 'B is 5.5 hours behind A');
+  assert.equal(diffBadgeText('en', 'A', 'B', 1), 'B is 1 hour ahead of A');
   assert.equal(diffBadgeText('en', 'A', 'B', 0), 'Both cities share the same time');
 });
 

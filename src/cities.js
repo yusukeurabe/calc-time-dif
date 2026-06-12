@@ -3,6 +3,7 @@ export const CITIES = [
   { id: 'tokyo', tz: 'Asia/Tokyo', en: 'Japan (Tokyo)', ja: '日本（東京）' },
   { id: 'vancouver', tz: 'America/Vancouver', en: 'Vancouver', ja: 'バンクーバー' },
   { id: 'losangeles', tz: 'America/Los_Angeles', en: 'Los Angeles', ja: 'ロサンゼルス' },
+  // San Francisco intentionally shares a zone with Los Angeles; picking both shows zero diff.
   { id: 'sanfrancisco', tz: 'America/Los_Angeles', en: 'San Francisco', ja: 'サンフランシスコ' },
   { id: 'denver', tz: 'America/Denver', en: 'Denver', ja: 'デンバー' },
   { id: 'chicago', tz: 'America/Chicago', en: 'Chicago', ja: 'シカゴ' },
