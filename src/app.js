@@ -40,12 +40,16 @@ function saveSettings() {
 }
 
 function fillSelect(select, selectedId) {
-  select.textContent = '';
-  for (const c of CITIES) {
-    const opt = document.createElement('option');
-    opt.value = c.id;
-    opt.textContent = c[state.lang];
-    select.appendChild(opt);
+  const stale = select.options.length !== CITIES.length
+    || select.options[0].textContent !== CITIES[0][state.lang];
+  if (stale) {
+    select.textContent = '';
+    for (const c of CITIES) {
+      const opt = document.createElement('option');
+      opt.value = c.id;
+      opt.textContent = c[state.lang];
+      select.appendChild(opt);
+    }
   }
   select.value = selectedId;
 }
@@ -74,12 +78,20 @@ function renderReadouts() {
   renderCard($('card-a'), a[state.lang], a.tz, 0);
   renderCard($('card-b'), b[state.lang], b.tz, dayRelation(state.cursorUtc, a.tz, b.tz));
   const pa = zonedParts(state.cursorUtc, a.tz);
-  $('date-input').value = `${pa.year}-${pad(pa.month)}-${pad(pa.day)}`;
-  $('time-input').value = `${pad(pa.hour)}:${pad(pa.minute)}`;
-  $('tl-cursor').setAttribute(
+  const dateInput = $('date-input');
+  if (document.activeElement !== dateInput) {
+    dateInput.value = `${pa.year}-${pad(pa.month)}-${pad(pa.day)}`;
+  }
+  const timeInput = $('time-input');
+  if (document.activeElement !== timeInput) {
+    timeInput.value = `${pad(pa.hour)}:${pad(pa.minute)}`;
+  }
+  const cursorEl = $('tl-cursor');
+  cursorEl.setAttribute(
     'aria-valuetext',
     `${a[state.lang]} ${formatDateLabel(state.lang, pa)} ${formatTime(pa)}`,
   );
+  cursorEl.setAttribute('aria-valuenow', String(pa.hour * 60 + pa.minute));
   timeline.setCursor(state.cursorUtc);
 }
 
@@ -96,6 +108,10 @@ function renderAll() {
   $('lang-en').setAttribute('aria-pressed', String(state.lang === 'en'));
   $('lang-ja').setAttribute('aria-pressed', String(state.lang === 'ja'));
   $('swap').setAttribute('aria-label', s.swap);
+  $('select-a').setAttribute('aria-label', s.cityA);
+  $('select-b').setAttribute('aria-label', s.cityB);
+  $('date-input').setAttribute('aria-label', s.jumpDate);
+  $('tl-cursor').setAttribute('aria-label', s.cursorLabel);
   $('now-btn-label').textContent = s.now;
   $('now-marker-label').textContent = s.now;
   $('hint').textContent = s.hint;
@@ -137,6 +153,7 @@ function bindEvents() {
   $('date-input').addEventListener('change', (e) => {
     if (!e.target.value) return;
     const [y, m, d] = e.target.value.split('-').map(Number);
+    if (y < 1000) return; // partially-typed year (Chrome fires change per segment keystroke)
     const a = cityById(state.cityA);
     const p = zonedParts(state.cursorUtc, a.tz);
     state.cursorUtc = zonedTimeToUtc(
@@ -156,6 +173,8 @@ function bindEvents() {
     renderReadouts();
     timeline.scrollToTime(state.cursorUtc);
   });
+  $('date-input').addEventListener('blur', renderReadouts);
+  $('time-input').addEventListener('blur', renderReadouts);
   $('now-btn').addEventListener('click', () => {
     state.cursorUtc = roundToMinute(Date.now());
     timeline.setNow(Date.now());

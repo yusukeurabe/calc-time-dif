@@ -113,7 +113,7 @@ export class Timeline {
     const trackW = RANGE_DAYS * 24 * this.cellWidth;
     for (const [marker, utc] of [[this.cursorEl, this.cursorUtc], [this.nowEl, this.nowUtc]]) {
       const x = this.xForUtc(utc);
-      marker.hidden = x < 0 || x > trackW;
+      marker.style.visibility = x < 0 || x > trackW ? 'hidden' : '';
       marker.style.left = `${x}px`;
     }
   }
