@@ -114,12 +114,19 @@ button:focus-visible, select:focus-visible, input:focus-visible, .tl-cursor:focu
 
 .tl-cell {
   position: absolute; top: 0; height: 32px;
-  display: flex; align-items: center; justify-content: center;
   font-size: 11px; user-select: none;
 }
 .tl-cell.day { background: var(--day); color: var(--day-text); }
 .tl-cell.night { background: var(--night); color: var(--night-text); }
 .tl-cell.midnight { font-weight: 700; }
+
+/* Digit centered on the cell's left edge = the exact h:00 instant, so the
+   cursor/now/midnight bars line up with the hour they point at. */
+.tl-hour {
+  position: absolute; left: 0; top: 50%;
+  transform: translate(-50%, -50%);
+  line-height: 1; pointer-events: none;
+}
 
 .tl-seg {
   position: absolute; top: 32px; height: 22px;
