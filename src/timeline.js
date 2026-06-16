@@ -63,10 +63,10 @@ export class Timeline {
     const todayKey = dateKeyOf(zonedParts(this.nowUtc, tz));
     let segStart = 0;
     cells.forEach((c, i) => {
-      const cell = el(
-        `tl-cell ${c.isDay ? 'day' : 'night'}${c.hour === 0 ? ' midnight' : ''}`,
-        String(c.hour),
-      );
+      const cell = el(`tl-cell ${c.isDay ? 'day' : 'night'}${c.hour === 0 ? ' midnight' : ''}`);
+      // The hour digit marks the start of the hour (h:00), so it sits centered
+      // on the cell's left edge — the same x the cursor/now/midnight bars use.
+      cell.appendChild(el('tl-hour', String(c.hour)));
       cell.style.left = `${this.xForUtc(c.utc)}px`;
       cell.style.width = `${this.cellWidth}px`;
       strip.appendChild(cell);
