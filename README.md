@@ -14,6 +14,7 @@ A visual time-difference converter for two cities. Two aligned, infinitely scrol
 - Draggable cursor (15-minute snap), tap-to-pick, and direct time input
 - DST-correct everywhere via the browser's built-in `Intl` API (e.g. Japan ↔ Vancouver switches between −16 h and −17 h automatically)
 - 23 selectable major cities, swap button, time-difference badge
+- Dark mode by default, with a light/dark theme toggle
 - English / Japanese UI toggle, 24-hour format, settings persisted in `localStorage`
 - Responsive — works on mobile and desktop
 
